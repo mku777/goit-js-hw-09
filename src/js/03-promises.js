@@ -3,19 +3,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 const formEl = document.querySelector('.form');
 formEl.addEventListener('submit', onFormSubmit);
 
-function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  const promiseObj = { position, delay };
-
-  return new Promise((resolve, reject) => {
-    if (shouldResolve) {
-      resolve(promiseObj);
-    } else {
-      reject(promiseObj);
-    }
-  });
-}
-
 function onFormSubmit(event) {
   event.preventDefault();
 
@@ -37,4 +24,17 @@ function onFormSubmit(event) {
       });
     delay += step;
   }
-}
+};
+
+function createPromise(position, delay) {
+  const shouldResolve = Math.random() > 0.3;
+  const promiseObj = { position, delay };
+
+  return new Promise((resolve, reject) => {
+    if (shouldResolve) {
+      resolve(promiseObj);
+    } else {
+      reject(promiseObj);
+    }
+  })
+};
