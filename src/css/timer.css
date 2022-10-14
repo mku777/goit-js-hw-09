@@ -9,7 +9,7 @@ button {
 }
 
 button:disabled {
-    background-color: #adadad;
+    background-color: #e4e4e4;
 }
 
 button:hover,
