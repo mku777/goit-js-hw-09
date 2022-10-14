@@ -18,13 +18,13 @@ function convertMs(ms) {
   const day = hour * 24;
 
   // Remaining days
-  const days = Math.floor(ms / day);
+  const days = addZero(Math.floor(ms / day));
   // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
+  const hours = addZero(Math.floor((ms % day) / hour));
   // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const minutes = addZero(Math.floor(((ms % day) % hour) / minute));
   // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const seconds = addZero(Math.floor((((ms % day) % hour) % minute) / second));
 
   return { days, hours, minutes, seconds };
 }
@@ -65,9 +65,10 @@ class Timer {
       const currentTime = Date.now();
       const deltaTime = selectedTime - currentTime;
       const componentsTimer = convertMs(deltaTime);
+      if (deltaTime > 0)
       this.updateComponents(componentsTimer);
-      if (deltaTime <= 0) {
-        this.stopTimer();
+      else {
+        clearInterval(this.timerID);
       }
     }, 1000);
   }
@@ -78,9 +79,6 @@ class Timer {
     secondsOut.textContent = seconds;
   }
 
-  stop() {
-    clearInterval(this.timerID);
-  }
 }
 
 const timer = new Timer();
