@@ -5,11 +5,10 @@ import 'flatpickr/dist/flatpickr.min.css';
 let selectedTime = null;
 const inputDate = document.querySelector('#datetime-picker');
 const startButton = document.querySelector('button[data-start]');
-const days = document.querySelector('span[data-days]');
-const hours = document.querySelector('span[data-hours]');
-const minutes = document.querySelector('span[data-minutes]');
-const seconds = document.querySelector('span[data-seconds]');
-
+const daysOut = document.querySelector('span[data-days]');
+const hoursOut = document.querySelector('span[data-hours]');
+const minutesOut = document.querySelector('span[data-minutes]');
+const secondsOut = document.querySelector('span[data-seconds]');
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -30,8 +29,8 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-function addZero (value) {
-  return String(value).padStart(2, "0");
+function addZero(value) {
+  return String(value).padStart(2, '0');
 }
 
 const options = {
@@ -50,3 +49,40 @@ const options = {
   },
 };
 
+class Timer {
+  constructor() {
+    startButton.disabled = true;
+    this.timerID = null;
+    this.isActive = false;
+  }
+
+  start() {
+    if (this.isActive) {
+      return;
+    }
+    this.isActive = true;
+    this.timerID = setInterval(() => {
+      const currentTime = Date.now();
+      const deltaTime = selectedTime - currentTime;
+      const componentsTimer = convertMs(deltaTime);
+      this.updateComponents(componentsTimer);
+      if (deltaTime <= 0) {
+        this.stopTimer();
+      }
+    }, 1000);
+  }
+  updateComponents({ days, hours, minutes, seconds }) {
+    daysOut.textContent = days;
+    hoursOut.textContent = hours;
+    minutesOut.textContent = minutes;
+    secondsOut.textContent = seconds;
+  }
+
+  stop() {
+    clearInterval(this.timerID);
+  }
+}
+
+const timer = new Timer();
+flatpickr(inputDate, options);
+startButton.addEventListener('click', () => timer.start());
